@@ -1,0 +1,13 @@
+# Ignorar todo
+*
+
+# Pero no ignores estos archivos específicos
+!.gitignore
+!config.c
+!config.h
+!main.c
+!max7219.c
+!max7219.h
+!pcd8544.c
+!pcd8544.h
+
