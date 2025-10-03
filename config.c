@@ -91,3 +91,29 @@ void TIM1_Timer_Init(void) {
     // Se establece el bit 0 (CEN - Counter Enable) en el registro de control 1.
     TIM1_CR1 |= 0x0001; 
 }
+
+
+
+void p_pullup(void) {
+    
+    // 1. Habilitar el reloj para los puertos GPIOB y GPIOC
+    // Bit 3 (IOPBEN) para GPIOB y Bit 4 (IOPCEN) para GPIOC.
+    // 0x00000008 (para GPIOB) | 0x00000010 (para GPIOC) = 0x00000018
+    RCC_APB2ENR |= 0x00000018;
+
+    // 2. Configurar el pin PB3 como entrada con pull-up
+    // Se usa GPIOB_CRL (pines 0-7). Bits [15:12] para PB3.
+    // Limpiamos los bits de configuración de PB3. Máscara: 0x0000F000
+    GPIOB_CRL &= ~0x0000F000;
+    // Configuramos como entrada pull-up/down ('1000' binario). Valor: 0x00008000
+    GPIOB_CRL |= 0x00008000;
+    // Activamos la resistencia de PULL-UP poniendo el bit 3 en '1'. Valor: 0x00000008
+    GPIOB_ODR |= 0x00000008;
+
+    // 3. Configurar el pin PC13 como salida push-pull (a 2MHz)
+    // Se usa GPIOC_CRH (pines 8-15). Bits [23:20] para PC13.
+    // Limpiamos los bits de configuración de PC13. Máscara: 0x00F00000
+    GPIOC_CRH &= ~0x00F00000;
+    // Configuramos como salida push-pull 2MHz ('0010' binario). Valor: 0x00200000
+    GPIOC_CRH |= 0x00200000;
+}

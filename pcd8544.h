@@ -27,4 +27,6 @@ void PCD8544_DrawChar(char c);
 // Escribe una cadena de texto en la posición actual del cursor
 void PCD8544_WriteString(const char* str);
 
+
+
 #endif // PCD8544_H
