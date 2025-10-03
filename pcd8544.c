@@ -140,7 +140,7 @@ void PCD8544_Init(void) {
 
     // 2. Secuencia de inicialización
     PCD8544_SendCommand(0x21); // Set de comandos extendido
-    PCD8544_SendCommand(0xB9); // Contraste (Vop)
+    //PCD8544_SendCommand(0xB9); // Contraste (Vop)
     PCD8544_SendCommand(0x07); // Coeficiente de temperatura
     PCD8544_SendCommand(0x14); // Bias 1:48
     PCD8544_SendCommand(0x20); // Set de comandos básico

@@ -25,15 +25,15 @@
 #define TIM1_PSC    (*(volatile uint32_t*)0x40012C28) //se adiciona psc
 #define TIM1_SR     (*(volatile uint32_t*)0x40012C10)
 
-//REGISTRO GPIO C
 #define GPIOC_CRH     (*(volatile uint32_t*)0x40011004)
 #define GPIOC_BSRR    (*(volatile uint32_t*)0x40011010)
 	
-//REGISTRO GPIO B
-#define GPIOB_CRL     (*(volatile uint32_t*)0x40010C00)
-#define GPIOB_ODR     (*(volatile uint32_t*)0x4001080C)
-#define GPIOB_IDR     (*(volatile uint32_t*)0x40010808)
-
+//REGISTRO GPIO B 
+#define GPIOB_CRL     (*(volatile uint32_t*)0x40010C00) 
+#define GPIOB_ODR     (*(volatile uint32_t*)0x40010C0C) 
+#define GPIOB_IDR     (*(volatile uint32_t*)0x40010C08)
+#define GPIOB_BSRR    (*(volatile uint32_t*)0x40010C10)
+#define GPIOB_CRH     (*(volatile uint32_t*)0x40010C04)
 
 
 
@@ -43,6 +43,6 @@ void SPI1_Init(void);
 void SPI1_Init_nokia(void);
 void TIM1_Counter_Init(void);
 void TIM1_Timer_Init(void);
-void p_pullup(void);
+void Button_LED_Init(void);
 
 

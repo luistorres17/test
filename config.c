@@ -94,26 +94,33 @@ void TIM1_Timer_Init(void) {
 
 
 
-void p_pullup(void) {
+// ... (otras funciones)
+
+void Button_LED_Init(void) {
+    // 1. Habilitar el reloj para el puerto GPIOB.
+    RCC_APB2ENR |= 0x00000008; // Bit 3 (IOPBEN) para GPIOB.
+
+    // --- Configuración de Salida (Backlight) ---
+    // 2. Configurar el pin PB0 como salida push-pull.
+    GPIOB_CRL &= ~0x0000000F; // Limpia la configuración de PB0.
+    GPIOB_CRL |=  0x00000002; // Configura como salida push-pull 2MHz.
+
+    // --- Configuración de Entradas (Botones) ---
+    // 3. Configurar el pin PB1 como entrada con pull-up (Botón Toggle Backlight).
+    GPIOB_CRL &= ~0x000000F0; // Limpia la configuración de PB1.
+    GPIOB_CRL |=  0x00000080; // Configura como entrada pull-up/down.
     
-    // 1. Habilitar el reloj para los puertos GPIOB y GPIOC
-    // Bit 3 (IOPBEN) para GPIOB y Bit 4 (IOPCEN) para GPIOC.
-    // 0x00000008 (para GPIOB) | 0x00000010 (para GPIOC) = 0x00000018
-    RCC_APB2ENR |= 0x00000018;
+    // 4. Configurar el pin PB10 como entrada con pull-up (Botón Contraste +).
+    // Se usa GPIOB_CRH (pines 8-15). Bits [11:8] para PB10.
+    GPIOB_CRH &= ~0x00000F00; // Limpia la configuración de PB10.
+    GPIOB_CRH |=  0x00008000; // Configura como entrada pull-up/down.
+    
+    // 5. Configurar el pin PB11 como entrada con pull-up (Botón Contraste -).
+    // Se usa GPIOB_CRH. Bits [15:12] para PB11.
+    GPIOB_CRH &= ~0x000F0000; // Limpia la configuración de PB11.
+    GPIOB_CRH |=  0x00800000; // Configura como entrada pull-up/down.
 
-    // 2. Configurar el pin PB3 como entrada con pull-up
-    // Se usa GPIOB_CRL (pines 0-7). Bits [15:12] para PB3.
-    // Limpiamos los bits de configuración de PB3. Máscara: 0x0000F000
-    GPIOB_CRL &= ~0x0000F000;
-    // Configuramos como entrada pull-up/down ('1000' binario). Valor: 0x00008000
-    GPIOB_CRL |= 0x00008000;
-    // Activamos la resistencia de PULL-UP poniendo el bit 3 en '1'. Valor: 0x00000008
-    GPIOB_ODR |= 0x00000008;
-
-    // 3. Configurar el pin PC13 como salida push-pull (a 2MHz)
-    // Se usa GPIOC_CRH (pines 8-15). Bits [23:20] para PC13.
-    // Limpiamos los bits de configuración de PC13. Máscara: 0x00F00000
-    GPIOC_CRH &= ~0x00F00000;
-    // Configuramos como salida push-pull 2MHz ('0010' binario). Valor: 0x00200000
-    GPIOC_CRH |= 0x00200000;
+    // 6. Activar las resistencias de PULL-UP para los tres botones.
+    // Escribimos '1' en los bits 1, 10 y 11 del registro ODR.
+    GPIOB_ODR |= (1 << 1) | (1 << 10) | (1 << 11);
 }
