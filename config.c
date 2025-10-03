@@ -94,33 +94,20 @@ void TIM1_Timer_Init(void) {
 
 
 
-// ... (otras funciones)
-
 void Button_LED_Init(void) {
     // 1. Habilitar el reloj para el puerto GPIOB.
     RCC_APB2ENR |= 0x00000008; // Bit 3 (IOPBEN) para GPIOB.
 
-    // --- Configuración de Salida (Backlight) ---
-    // 2. Configurar el pin PB0 como salida push-pull.
-    GPIOB_CRL &= ~0x0000000F; // Limpia la configuración de PB0.
-    GPIOB_CRL |=  0x00000002; // Configura como salida push-pull 2MHz.
+    // 2. Configurar el pin PB0 como salida push-pull (para el LED/Backlight).
+    // Se usa GPIOB_CRL (pines 0-7). Bits [3:0] para PB0.
+    GPIOB_CRL &= ~0x0000000F; // Limpiamos los bits de configuración de PB0.
+    GPIOB_CRL |=  0x00000002; // Configuramos como salida push-pull 2MHz ('0010' binario).
 
-    // --- Configuración de Entradas (Botones) ---
-    // 3. Configurar el pin PB1 como entrada con pull-up (Botón Toggle Backlight).
-    GPIOB_CRL &= ~0x000000F0; // Limpia la configuración de PB1.
-    GPIOB_CRL |=  0x00000080; // Configura como entrada pull-up/down.
+    // 3. Configurar el pin PB1 como entrada con pull-up (para el botón).
+    // Se usa GPIOB_CRL. Bits [7:4] para PB1.
+    GPIOB_CRL &= ~0x000000F0; // Limpiamos los bits de configuración de PB1.
+    GPIOB_CRL |=  0x00000080; // Configuramos como entrada pull-up/down ('1000' binario).
     
-    // 4. Configurar el pin PB10 como entrada con pull-up (Botón Contraste +).
-    // Se usa GPIOB_CRH (pines 8-15). Bits [11:8] para PB10.
-    GPIOB_CRH &= ~0x00000F00; // Limpia la configuración de PB10.
-    GPIOB_CRH |=  0x00008000; // Configura como entrada pull-up/down.
-    
-    // 5. Configurar el pin PB11 como entrada con pull-up (Botón Contraste -).
-    // Se usa GPIOB_CRH. Bits [15:12] para PB11.
-    GPIOB_CRH &= ~0x000F0000; // Limpia la configuración de PB11.
-    GPIOB_CRH |=  0x00800000; // Configura como entrada pull-up/down.
-
-    // 6. Activar las resistencias de PULL-UP para los tres botones.
-    // Escribimos '1' en los bits 1, 10 y 11 del registro ODR.
-    GPIOB_ODR |= (1 << 1) | (1 << 10) | (1 << 11);
+    // Activamos la resistencia de PULL-UP poniendo el bit 1 en '1'.
+    GPIOB_ODR |= 0x00000002;
 }
